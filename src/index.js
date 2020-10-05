@@ -7,45 +7,40 @@ document.addEventListener("DOMContentLoaded", () => {
     LIGHT: 'light-theme',
     DARK: 'dark-theme',
   };
-  const menuList = document.querySelector('.js-menu');
-  const markup = menuTemplate((dishesList));
-  menuList.insertAdjacentHTML('afterbegin', markup);
-  const checkBox = document.querySelector('#theme-switch-toggle');
-  const body = document.querySelector('body');
-  let getTheme = localStorage.getItem('theme');
 
-  if (getTheme === Theme.DARK) {
-    body.classList.add('dark-theme');
-    checkBox.checked = true;
+  const menuListRef = {
+    menuList: document.querySelector('.js-menu'),
+    markup: menuTemplate((dishesList)),
+    checkBox: document.querySelector('#theme-switch-toggle'),
+    body: document.querySelector('body'),
+  };
+  menuListRef.menuList.insertAdjacentHTML('afterbegin', menuListRef.markup);
+
+  let storedTheme = localStorage.getItem('theme');
+
+  if (storedTheme === Theme.DARK) {
+    menuListRef.body.classList.add('dark-theme');
+    menuListRef.checkBox.checked = true;
   } else  {
-    body.classList.remove(Theme.DARK);
-    body.classList.add(Theme.LIGHT);
+    menuListRef.body.classList.remove(Theme.DARK);
+    menuListRef.body.classList.add(Theme.LIGHT);
   }
-
-  const getFromLocalstorage = () => {
-    localStorage.getItem('theme');
-  };
-
-  const saveToLocalstorage = () => {
-    localStorage.setItem('theme', getTheme);
-    getFromLocalstorage()
-  };
 
   const handleTheme = () => {
 
-    if(body.classList.contains(Theme.LIGHT)) {
-      body.classList.remove(Theme.LIGHT);
-      body.classList.add(Theme.DARK);
-      getTheme = Theme.DARK;
-      saveToLocalstorage();
+    if(menuListRef.body.classList.contains(Theme.LIGHT)) {
+      menuListRef.body.classList.remove(Theme.LIGHT);
+      menuListRef.body.classList.add(Theme.DARK);
+      storedTheme = Theme.DARK;
+      localStorage.setItem('theme', storedTheme);
 
-    } else if (checkBox.checked === true || body.classList.contains(Theme.DARK)) {
-       body.classList.remove(Theme.DARK);
-       body.classList.add(Theme.LIGHT);
-       getTheme = Theme.LIGHT;
-       saveToLocalstorage()
+    } else if (menuListRef.body.classList.contains(Theme.DARK)) {
+      menuListRef.body.classList.remove(Theme.DARK);
+      menuListRef.body.classList.add(Theme.LIGHT);
+      storedTheme = Theme.LIGHT;
+      localStorage.setItem('theme', storedTheme);
      }
    };
 
-  checkBox.addEventListener('change', handleTheme);
+  menuListRef.checkBox.addEventListener('change', handleTheme);
 });
